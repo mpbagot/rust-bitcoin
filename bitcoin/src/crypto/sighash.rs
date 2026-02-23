@@ -1993,7 +1993,9 @@ mod tests {
             };
 
             // tests
-            let keypair = Keypair::from_secret_key(&internal_priv_key);
+            let keypair = Keypair::from_secret_key(
+                &crate::PrivateKey::from_secp(internal_priv_key, network::NetworkKind::Main)
+            );
             let internal_key = XOnlyPublicKey::from_keypair(&keypair);
             let tweaked_keypair = keypair.tap_tweak(merkle_root);
             let mut sig_msg = Vec::new();
