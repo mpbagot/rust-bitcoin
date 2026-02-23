@@ -904,11 +904,12 @@ impl GetKey for $map<XOnlyPublicKey, PrivateKey> {
         match key_request {
             KeyRequest::XOnlyPubkey(xonly) => Ok(self.get(xonly).cloned()),
             KeyRequest::Pubkey(pk) => {
-                let (xonly, parity) = pk.as_inner().x_only_public_key();
+                let xonly = XOnlyPublicKey::from(*pk);
+                let parity = xonly.parity();
 
                 if let Some(mut priv_key) = self.get(&XOnlyPublicKey::from(xonly)).cloned() {
                     let computed_pk = priv_key.public_key();
-                    let (_, computed_parity) = computed_pk.as_inner().x_only_public_key();
+                    let computed_parity = XOnlyPublicKey::from(computed_pk).parity();
 
                     if computed_parity != parity {
                         priv_key = priv_key.negate();
@@ -2361,23 +2362,24 @@ mod tests {
         use crate::psbt::{GetKey, KeyRequest};
 
         let (mut priv_key, mut pk) = gen_keys();
-        let (xonly, parity) = pk.as_inner().x_only_public_key();
+        let xonly = XOnlyPublicKey::from(pk);
 
         let mut pubkey_map: HashMap<PublicKey, PrivateKey> = HashMap::new();
 
-        if parity == secp256k1::Parity::Even {
+        if xonly.parity() == secp256k1::Parity::Even {
             priv_key = priv_key.negate();
             pk = priv_key.public_key().try_into().expect("gen_keys generates compressed keys");
         }
 
         pubkey_map.insert(pk.into(), priv_key);
 
-        let req_result = pubkey_map.get_key(&KeyRequest::XOnlyPubkey(xonly.into())).unwrap();
+        let req_result = pubkey_map.get_key(&KeyRequest::XOnlyPubkey(xonly)).unwrap();
 
         let retrieved_key = req_result.unwrap();
 
         let retrieved_pub_key = retrieved_key.public_key();
-        let (retrieved_xonly, retrieved_parity) = retrieved_pub_key.as_inner().x_only_public_key();
+        let retrieved_xonly = XOnlyPublicKey::from(retrieved_pub_key);
+        let retrieved_parity = retrieved_xonly.parity();
 
         assert_eq!(xonly, retrieved_xonly);
         assert_eq!(

@@ -2016,14 +2016,13 @@ mod tests {
             let key_spend_sig = tweaked_keypair.to_keypair().raw_sign(&sighash.to_byte_array(), Some(&[0u8; 32]));
 
             // Only compare the inner key, not the parity
-            assert_eq!(expected.internal_pubkey.as_inner(), internal_key.as_inner());
+            assert_eq!(expected.internal_pubkey.with_parity(internal_key.parity()), internal_key);
             assert_eq!(expected.sig_msg, sig_msg.to_lower_hex_string());
             assert_eq!(expected.sig_hash, sighash);
             assert_eq!(expected_hash_ty, hash_ty);
             assert_eq!(expected_key_spend_sig, key_spend_sig);
 
-            let tweaked_priv_key =
-                SecretKey::from_keypair(tweaked_keypair.to_keypair().as_inner());
+            let tweaked_priv_key = tweaked_keypair.as_keypair().to_secret_key();
             assert_eq!(expected.tweaked_privkey, tweaked_priv_key);
         }
     }
