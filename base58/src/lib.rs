@@ -28,6 +28,8 @@ extern crate std;
 
 #[cfg(feature = "alloc")]
 include!("../include/write_err.rs");
+#[cfg(feature = "alloc")]
+include!("../include/array_vec.rs");
 
 #[cfg(feature = "alloc")]
 static BASE58_CHARS: &[u8] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
@@ -47,8 +49,6 @@ pub use std::{string::String, vec::Vec};
 use hashes::sha256d;
 #[cfg(feature = "alloc")]
 use internals::array::ArrayExt;
-#[cfg(feature = "alloc")]
-use internals::array_vec::ArrayVec;
 #[allow(unused)] // MSRV polyfill
 #[cfg(feature = "alloc")]
 use internals::slice::SliceExt;

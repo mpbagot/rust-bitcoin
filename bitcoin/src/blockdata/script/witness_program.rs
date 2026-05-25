@@ -7,10 +7,9 @@
 //!
 //! [BIP-0141]: <https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki>
 
-use internals::array_vec::ArrayVec;
-
 use super::witness_version::WitnessVersion;
 use super::{PushBytes, WScriptHash, WitnessScript, WitnessScriptSizeError};
+use crate::array_vec::ArrayVec;
 use crate::crypto::key::{FullPublicKey, TapTweak, TweakedPublicKey, UntweakedPublicKey};
 use crate::script::WitnessScriptExt as _;
 use crate::taproot::TapNodeHash;

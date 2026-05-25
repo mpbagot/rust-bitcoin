@@ -65,6 +65,7 @@ extern crate alloc;
 extern crate std;
 
 include!("../include/write_err.rs");
+include!("../include/array_vec.rs");
 
 mod compact_size;
 mod decode;

@@ -41,6 +41,7 @@ include!("../include/newtype.rs"); // Explained in `REPO_DIR/docs/README.md`.
 include!("../include/serde_string.rs");
 #[cfg(feature = "alloc")]
 include!("../include/asref_push_bytes.rs");
+include!("../include/array_vec.rs");
 
 // Encapsulation module for the `PushBytes` code to be removed before 1.0.
 #[cfg(feature = "alloc")]

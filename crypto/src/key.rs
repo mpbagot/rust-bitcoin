@@ -21,7 +21,6 @@ use hashes::hash160;
 use hex::DisplayHex;
 #[cfg(feature = "alloc")]
 use internals::array::ArrayExt;
-use internals::array_vec::ArrayVec;
 use network::NetworkKind;
 #[cfg(feature = "rand")]
 #[cfg(feature = "std")]
@@ -29,8 +28,8 @@ pub use secp256k1::rand;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-use crate::ecdsa;
 use crate::hex::{self, DecodeFixedLengthBytesError};
+use crate::{ecdsa, ArrayVec};
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 pub use secp256k1::{constants, Parity, Verification};
@@ -306,7 +305,7 @@ mod encapsulate {
 }
 
 mod serialized_legacy_public_key {
-    use internals::array_vec::ArrayVec;
+    use crate::ArrayVec;
 
     /// A serialized form of `LegacyPublicKey`.
     ///

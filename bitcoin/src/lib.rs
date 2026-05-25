@@ -77,6 +77,7 @@ pub extern crate secp256k1;
 #[macro_use]
 pub extern crate serde;
 
+mod array_vec;
 mod internal_macros;
 
 include!("../include/array_newtype.rs");

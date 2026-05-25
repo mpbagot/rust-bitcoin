@@ -6,14 +6,12 @@
 //! consensus protocol to encode collection lengths. However, there are also some
 //! unique non-length use cases.
 
-use internals::array_vec::ArrayVec;
-
 use crate::decode::Decoder;
 use crate::encode::{Encoder, EncoderStatus, ExactSizeEncoder};
 use crate::error::{
     CompactSizeDecoderError, CompactSizeDecoderErrorInner, LengthPrefixExceedsMaxError,
 };
-use crate::DecoderStatus;
+use crate::{ArrayVec, DecoderStatus};
 
 /// Default maximum size of a decoded object in bytes.
 ///

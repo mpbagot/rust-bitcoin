@@ -120,8 +120,6 @@ mod prelude {
 
 #[cfg(feature = "alloc")]
 use encoding::Encoder;
-#[cfg(feature = "alloc")]
-use internals::array_vec::ArrayVec;
 
 // Encode a compact size to a slice without allocating
 #[cfg(feature = "alloc")]
@@ -135,3 +133,4 @@ include!("../include/newtype.rs"); // Explained in `REPO_DIR/docs/README.md`.
 include!("../include/decoder_newtype.rs"); // decoder_newtype! macro
 #[cfg(feature = "alloc")]
 include!("../include/asref_push_bytes.rs"); // impl_asref_push_bytes! macro
+include!("../include/array_vec.rs");

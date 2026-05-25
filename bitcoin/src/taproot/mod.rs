@@ -53,7 +53,7 @@ pub use self::error::{
 #[doc(inline)]
 pub use crate::XOnlyPublicKey;
 
-type ControlBlockArrayVec = internals::array_vec::ArrayVec<u8, TAPROOT_CONTROL_MAX_SIZE>;
+type ControlBlockArrayVec = crate::array_vec::ArrayVec<u8, TAPROOT_CONTROL_MAX_SIZE>;
 
 impl From<LeafNode> for TapNodeHash {
     fn from(leaf: LeafNode) -> Self { leaf.node_hash() }

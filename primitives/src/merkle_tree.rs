@@ -13,8 +13,6 @@
 use alloc::vec::Vec;
 
 use hashes::{sha256d, HashEngine};
-#[cfg(not(feature = "alloc"))]
-use internals::array_vec::ArrayVec;
 
 #[doc(inline)]
 pub use crate::hash_types::{
@@ -23,6 +21,8 @@ pub use crate::hash_types::{
 };
 use crate::hash_types::{Txid, Wtxid};
 use crate::transaction::TxIdentifier;
+#[cfg(not(feature = "alloc"))]
+use crate::ArrayVec;
 
 /// A node in a Merkle tree of transactions or witness data within a block.
 ///
