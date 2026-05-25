@@ -98,7 +98,9 @@ mod encapsulate {
 }
 #[doc(inline)]
 pub use encapsulate::SignedAmount;
-use internals::const_casts;
+
+// const_casts module
+include!("../../include/const_casts.rs");
 
 impl SignedAmount {
     /// The zero amount.

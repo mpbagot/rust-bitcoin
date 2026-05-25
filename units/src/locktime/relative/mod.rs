@@ -12,7 +12,6 @@ use core::{convert, fmt};
 
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
-use internals::const_casts;
 
 use crate::parse_int::{self, PrefixedHexError, UnprefixedHexError};
 #[cfg(doc)]
@@ -26,6 +25,9 @@ pub use self::error::{
     InvalidTimeError, IsSatisfiedByError, IsSatisfiedByHeightError, IsSatisfiedByTimeError,
     TimeOverflowError,
 };
+
+// const_casts module
+include!("../../../include/const_casts.rs");
 
 /// A relative lock time value, representing either a block height or time (512 second intervals).
 ///

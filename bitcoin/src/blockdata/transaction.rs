@@ -13,7 +13,6 @@
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
 use encoding::CompactSizeEncoder;
-use internals::const_casts;
 use io::{BufRead, Write};
 
 use super::Weight;
@@ -45,6 +44,9 @@ pub use self::error::{
     ParseOutPointError, ParseTransactionError, TransactionDecoderError, TxInDecoderError,
     TxOutDecoderError, VersionDecoderError,
 };
+
+// const_casts module
+include!("../../include/const_casts.rs");
 
 impl Encodable for Txid {
     fn consensus_encode<W: Write + ?Sized>(&self, w: &mut W) -> Result<usize, io::Error> {

@@ -9,7 +9,6 @@ use core::{default, fmt};
 
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
-use internals::const_casts;
 use NumOpResult as R;
 
 #[cfg(feature = "encoding")]
@@ -21,6 +20,9 @@ use super::{
 };
 use crate::result::{MathOp, NumOpError as E, NumOpResult};
 use crate::{parse_int, FeeRate, Weight};
+
+// const_casts module
+include!("../../include/const_casts.rs");
 
 mod encapsulate {
     use super::OutOfRangeError;

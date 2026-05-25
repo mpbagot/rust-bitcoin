@@ -44,4 +44,3 @@ pub mod slice;
 #[cfg(feature = "serde")]
 #[macro_use]
 pub mod serde;
-pub mod const_casts;
