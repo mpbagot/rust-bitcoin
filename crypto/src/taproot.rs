@@ -5,6 +5,8 @@
 //! This module provides Taproot signatures used by Bitcoin that can be roundtrip (de)serialized.
 
 #[cfg(feature = "alloc")]
+use alloc::string::String;
+#[cfg(feature = "alloc")]
 use alloc::vec::Vec;
 use core::borrow::Borrow;
 use core::fmt;
@@ -14,8 +16,6 @@ use core::str::FromStr;
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
 use internals::array::ArrayExt;
-#[cfg(feature = "alloc")]
-use internals::impl_to_hex_from_lower_hex;
 
 pub use self::into_iter::IntoIter;
 use crate::hex;
@@ -201,6 +201,16 @@ impl SerializedSignature {
     /// Set the length of the object.
     #[inline]
     pub(crate) fn set_len_unchecked(&mut self, len: usize) { self.len = len; }
+
+    /// Gets the hex representation of this type.
+    #[cfg(feature = "alloc")]
+    pub fn to_hex(&self) -> String {
+        use core::fmt::Write;
+
+        let mut hex_string = String::with_capacity(self.len * 2);
+        write!(&mut hex_string, "{:x}", self).expect("writing to string shouldn't fail");
+        hex_string
+    }
 }
 
 impl fmt::Debug for SerializedSignature {
@@ -215,9 +225,6 @@ impl fmt::LowerHex for SerializedSignature {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { self.fmt_internal(f, hex::Case::Lower) }
 }
-#[cfg(feature = "alloc")]
-impl_to_hex_from_lower_hex!(SerializedSignature, |signature: &SerializedSignature| signature.len
-    * 2);
 
 impl fmt::UpperHex for SerializedSignature {
     #[inline]

@@ -11,6 +11,8 @@ use alloc::string::String;
 use alloc::vec::Vec;
 use core::borrow::Borrow;
 use core::fmt;
+#[cfg(feature = "alloc")]
+use core::fmt::Write;
 use core::str::FromStr;
 
 #[cfg(feature = "arbitrary")]
@@ -20,8 +22,6 @@ use hex::DisplayHex;
 #[cfg(feature = "alloc")]
 use internals::array::ArrayExt;
 use internals::array_vec::ArrayVec;
-#[cfg(feature = "alloc")]
-use internals::impl_to_hex_from_lower_hex;
 use network::NetworkKind;
 #[cfg(feature = "rand")]
 #[cfg(feature = "std")]
@@ -419,6 +419,14 @@ impl XOnlyPublicKey {
             Err(_) => Err(TweakXOnlyPublicKeyError::ResultKeyInvalid),
         }
     }
+
+    /// Gets the hex representation of this type.
+    #[cfg(feature = "alloc")]
+    pub fn to_hex(&self) -> String {
+        let mut hex_string = String::with_capacity(constants::SCHNORR_PUBLIC_KEY_SIZE * 2);
+        write!(&mut hex_string, "{:x}", self).expect("writing to string shouldn't fail");
+        hex_string
+    }
 }
 
 impl FromStr for XOnlyPublicKey {
@@ -463,9 +471,6 @@ impl fmt::LowerHex for XOnlyPublicKey {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { self.to_inner().fmt(f) }
 }
-// Allocate for serialized size
-#[cfg(feature = "alloc")]
-impl_to_hex_from_lower_hex!(XOnlyPublicKey, |_| constants::SCHNORR_PUBLIC_KEY_SIZE * 2);
 
 impl fmt::Display for XOnlyPublicKey {
     #[inline]
@@ -1439,15 +1444,20 @@ impl TweakedPublicKey {
     pub fn serialize(&self) -> [u8; constants::SCHNORR_PUBLIC_KEY_SIZE] {
         self.as_x_only_public_key().serialize().0
     }
+
+    /// Gets the hex representation of this type.
+    #[cfg(feature = "alloc")]
+    pub fn to_hex(&self) -> String {
+        let mut hex_string = String::with_capacity(constants::SCHNORR_PUBLIC_KEY_SIZE * 2);
+        write!(&mut hex_string, "{:x}", self).expect("writing to string shouldn't fail");
+        hex_string
+    }
 }
 
 impl fmt::LowerHex for TweakedPublicKey {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { self.as_x_only_public_key().fmt(f) }
 }
-// Allocate for serialized size
-#[cfg(feature = "alloc")]
-impl_to_hex_from_lower_hex!(TweakedPublicKey, |_| constants::SCHNORR_PUBLIC_KEY_SIZE * 2);
 
 impl fmt::Display for TweakedPublicKey {
     #[inline]

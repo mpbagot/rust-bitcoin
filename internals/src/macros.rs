@@ -19,6 +19,7 @@ macro_rules! const_assert {
 ///
 /// The added function allocates a `String` then calls through to [`core::fmt::LowerHex`].
 #[macro_export]
+#[deprecated(since = "TBD", note = "use a manual to_hex function instead")]
 macro_rules! impl_to_hex_from_lower_hex {
     ($t:ident, $hex_len_fn:expr) => {
         impl $t {

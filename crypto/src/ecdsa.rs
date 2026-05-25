@@ -5,6 +5,8 @@
 //! This module provides ECDSA signatures used by Bitcoin that can be roundtrip (de)serialized.
 
 #[cfg(feature = "alloc")]
+use alloc::string::String;
+#[cfg(feature = "alloc")]
 use alloc::vec::Vec;
 use core::borrow::Borrow;
 use core::fmt;
@@ -17,8 +19,6 @@ use core::str::FromStr;
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
 use hex::DisplayHex;
-#[cfg(feature = "alloc")]
-use internals::impl_to_hex_from_lower_hex;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -148,6 +148,16 @@ impl SerializedSignature {
     /// Returns an iterator over bytes of the signature.
     #[inline]
     pub fn iter(&self) -> core::slice::Iter<'_, u8> { self.into_iter() }
+
+    /// Gets the hex representation of this type.
+    #[cfg(feature = "alloc")]
+    pub fn to_hex(&self) -> String {
+        use core::fmt::Write;
+
+        let mut hex_string = String::with_capacity(self.len * 2);
+        write!(&mut hex_string, "{:x}", self).expect("writing to string shouldn't fail");
+        hex_string
+    }
 }
 
 impl fmt::Debug for SerializedSignature {
@@ -166,9 +176,6 @@ impl fmt::LowerHex for SerializedSignature {
         fmt::LowerHex::fmt(&(**self).as_hex(), f)
     }
 }
-#[cfg(feature = "alloc")]
-impl_to_hex_from_lower_hex!(SerializedSignature, |signature: &SerializedSignature| signature.len
-    * 2);
 
 impl fmt::UpperHex for SerializedSignature {
     #[inline]
