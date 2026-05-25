@@ -15,11 +15,10 @@ use core::str::FromStr;
 
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
-use internals::array::ArrayExt;
 
 pub use self::into_iter::IntoIter;
-use crate::hex;
 use crate::sighash::{InvalidSighashTypeError, TapSighashType};
+use crate::{hex, ArrayExt};
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 #[doc(no_inline)]

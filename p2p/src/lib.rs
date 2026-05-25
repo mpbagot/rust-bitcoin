@@ -10,6 +10,7 @@
 
 include!("../include/array_newtype.rs");
 include!("../include/write_err.rs");
+include!("../include/array_ext.rs");
 
 mod network_ext;
 

@@ -49,7 +49,6 @@ use core::str::FromStr;
 use bech32::primitives::gf32::Fe32;
 use bech32::primitives::hrp::Hrp;
 use hashes::{hash160, HashEngine};
-use internals::array::ArrayExt;
 
 use crate::constants::{
     PUBKEY_ADDRESS_PREFIX_MAIN, PUBKEY_ADDRESS_PREFIX_TEST, SCRIPT_ADDRESS_PREFIX_MAIN,
@@ -69,6 +68,7 @@ use crate::script::{
     WitnessScript, WitnessScriptExt as _, WitnessScriptSizeError,
 };
 use crate::taproot::TapNodeHash;
+use crate::ArrayExt;
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 #[doc(no_inline)]

@@ -19,8 +19,6 @@ use core::str::FromStr;
 use arbitrary::{Arbitrary, Unstructured};
 use hashes::hash160;
 use hex::DisplayHex;
-#[cfg(feature = "alloc")]
-use internals::array::ArrayExt;
 use network::NetworkKind;
 #[cfg(feature = "rand")]
 #[cfg(feature = "std")]
@@ -29,6 +27,8 @@ pub use secp256k1::rand;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::hex::{self, DecodeFixedLengthBytesError};
+#[cfg(feature = "alloc")]
+use crate::ArrayExt;
 use crate::{ecdsa, ArrayVec};
 
 #[rustfmt::skip]                // Keep public re-exports separate.

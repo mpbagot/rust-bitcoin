@@ -39,6 +39,5 @@ pub mod _export {
     pub extern crate alloc;
 }
 
-pub mod array;
 pub mod script;
 pub mod slice;

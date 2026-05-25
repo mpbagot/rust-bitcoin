@@ -14,12 +14,13 @@ use encoding::{
     Encoder2, Encoder4, SliceEncoder, VecDecoder,
 };
 use hashes::{sha256, siphash24, HashEngine};
-use internals::array::ArrayExt as _;
 use primitives::block::{
     Block, BlockHash, BlockHashDecoder, BlockHashEncoder, Header, HeaderDecoder, HeaderEncoder,
 };
 use primitives::transaction::{Transaction, TransactionDecoder, TransactionEncoder};
 use primitives::BlockChecked;
+
+use crate::ArrayExt as _;
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 #[doc(no_inline)]

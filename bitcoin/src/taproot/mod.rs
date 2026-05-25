@@ -14,7 +14,6 @@ use core::iter::FusedIterator;
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
 use hashes::{sha256t, HashEngine};
-use internals::array::ArrayExt;
 #[allow(unused)] // MSRV polyfill
 use internals::slice::SliceExt;
 use io::Write;
@@ -26,7 +25,7 @@ use crate::crypto::key::{
     SerializedXOnlyPublicKey, TapTweak, TweakedPublicKey, UntweakedPublicKey,
 };
 use crate::prelude::{BTreeMap, BTreeSet, BinaryHeap, Vec};
-use crate::{hex, TapScript, TapScriptBuf};
+use crate::{hex, ArrayExt, TapScript, TapScriptBuf};
 
 // Re-export these so downstream only has to use one `taproot` module.
 #[rustfmt::skip]

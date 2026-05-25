@@ -16,8 +16,9 @@ use core::{fmt, slice};
 use arbitrary::{Arbitrary, Unstructured};
 use crypto::key::{FullPublicKey, Keypair, PrivateKey, XOnlyPublicKey};
 use hashes::{hash160, hash_newtype, sha512, Hash, HashEngine, Hmac, HmacEngine};
-use internals::array::ArrayExt;
 use network::NetworkKind;
+
+use crate::ArrayExt;
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 #[doc(no_inline)]

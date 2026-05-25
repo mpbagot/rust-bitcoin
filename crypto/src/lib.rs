@@ -28,6 +28,7 @@ extern crate serde;
 
 include!("../include/write_err.rs");
 include!("../include/input_string.rs");
+include!("../include/array_ext.rs");
 
 pub mod ecdsa;
 pub mod key;

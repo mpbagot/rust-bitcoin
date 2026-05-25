@@ -2,8 +2,6 @@
 
 use core::fmt;
 
-use internals::array::ArrayExt; // For `split_first`.
-
 use super::witness_version::WitnessVersion;
 use super::{
     Builder, Instruction, InstructionIndices, Instructions, PushBytes, RedeemScript,
@@ -19,6 +17,7 @@ use crate::prelude::{sink, String, ToString};
 use crate::script::{self, ScriptPubKeyBufExt as _};
 use crate::taproot::{LeafVersion, TapLeafHash, TapLeafHashExt as _, TapNodeHash};
 use crate::witness_program::P2A_PROGRAM;
+use crate::ArrayExt; // For `split_first`.
 use crate::{internal_macros, Amount, FeeRate, ScriptPubKeyBuf, ToU64 as _, WitnessScriptBuf};
 
 internal_macros::define_extension_trait! {

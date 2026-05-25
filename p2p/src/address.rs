@@ -15,9 +15,8 @@ use encoding::{
     ArrayDecoder, ArrayEncoder, ByteVecDecoder, BytesEncoder, CompactSizeEncoder,
     CompactSizeU64Decoder, Decoder2, Decoder4, Encoder2, Encoder4, EncoderStatus,
 };
-use internals::array::ArrayExt;
 
-use crate::ServiceFlags;
+use crate::{ArrayExt, ServiceFlags};
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 #[doc(no_inline)]

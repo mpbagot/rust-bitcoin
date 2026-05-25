@@ -35,6 +35,7 @@ include!("../include/write_err.rs");
 
 #[cfg(feature = "serde")]
 include!("../include/serde_string.rs");
+include!("../include/array_ext.rs");
 
 #[cfg(feature = "alloc")]
 pub mod bip32;

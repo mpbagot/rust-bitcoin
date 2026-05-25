@@ -24,7 +24,6 @@ use encoding::{
 };
 #[cfg(feature = "alloc")]
 use hashes::sha256d;
-use internals::array::ArrayExt as _;
 #[cfg(feature = "serde")]
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 #[cfg(feature = "alloc")]
@@ -48,6 +47,7 @@ use crate::script::{ScriptEncoder, ScriptPubKeyBufDecoder, ScriptSigBufDecoder};
 use crate::sequence::{SequenceDecoder, SequenceEncoder};
 #[cfg(feature = "alloc")]
 use crate::witness::{WitnessDecoder, WitnessEncoder};
+use crate::ArrayExt as _;
 #[cfg(feature = "alloc")]
 use crate::{absolute, Amount, ScriptPubKeyBuf, ScriptSigBuf, Sequence, Weight, Witness};
 
