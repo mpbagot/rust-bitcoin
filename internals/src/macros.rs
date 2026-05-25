@@ -4,6 +4,7 @@
 
 /// Asserts a boolean expression at compile time.
 #[macro_export]
+#[deprecated(since = "TBD", note = "this should only be used in bitcoin instead")]
 macro_rules! const_assert {
     ($x:expr $(; $message:expr)?) => {
         const _: () = {
