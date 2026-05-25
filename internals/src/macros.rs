@@ -248,6 +248,7 @@ macro_rules! _emit_alloc {
 
 /// Implements standard array methods for a given wrapper type.
 #[macro_export]
+#[deprecated(since = "TBD", note = "use include!(\"../../include/array_newtype.rs\") instead")]
 macro_rules! impl_array_newtype {
     ($thing:ident, $ty:ty, $len:literal) => {
         impl $thing {
