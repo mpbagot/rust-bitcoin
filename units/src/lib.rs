@@ -44,6 +44,7 @@ pub extern crate serde;
 pub extern crate arbitrary;
 
 include!("../include/write_err.rs");
+include!("../include/input_string.rs");
 
 #[doc(hidden)]
 pub mod _export {

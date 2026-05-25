@@ -15,15 +15,19 @@
 #[cfg(feature = "std")]
 extern crate std;
 
+#[cfg(feature = "alloc")]
+extern crate alloc;
+
 #[cfg(feature = "serde")]
 pub extern crate serde;
+
+include!("../include/input_string.rs");
 
 use core::fmt;
 use core::str::FromStr;
 
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
-use internals::error::InputString;
 #[cfg(feature = "serde")]
 use serde::{de::Visitor, Deserialize, Deserializer, Serialize, Serializer};
 
@@ -277,7 +281,7 @@ impl<'a> Arbitrary<'a> for NetworkKind {
 pub mod error {
     use core::fmt;
 
-    use internals::error::InputString;
+    use crate::InputString;
 
     /// An error in parsing network string.
     #[derive(Debug, Clone, PartialEq, Eq)]

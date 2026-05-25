@@ -27,6 +27,7 @@ pub extern crate secp256k1;
 extern crate serde;
 
 include!("../include/write_err.rs");
+include!("../include/input_string.rs");
 
 pub mod ecdsa;
 pub mod key;

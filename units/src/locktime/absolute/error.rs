@@ -5,10 +5,9 @@
 use core::convert::Infallible;
 use core::fmt;
 
-use internals::error::InputString;
-
 use super::{Height, MedianTimePast, LOCK_TIME_THRESHOLD};
 use crate::parse_int::{ParseIntError, PrefixedHexError, UnprefixedHexError};
+use crate::InputString;
 
 /// An error consensus decoding an `LockTime`.
 #[cfg(feature = "encoding")]

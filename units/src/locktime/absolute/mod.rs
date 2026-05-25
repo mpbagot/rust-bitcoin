@@ -12,12 +12,12 @@ use core::fmt;
 
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
-use internals::error::InputString;
 
 use self::error::ParseError;
 #[cfg(doc)]
 use crate::absolute;
 use crate::parse_int::{self, PrefixedHexError, UnprefixedHexError};
+use crate::InputString;
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 #[doc(no_inline)]

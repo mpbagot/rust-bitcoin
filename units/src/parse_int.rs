@@ -4,7 +4,7 @@
 
 use core::str::FromStr;
 
-use internals::error::InputString;
+use crate::InputString;
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 #[doc(no_inline)]
@@ -401,7 +401,7 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::error::InputString;
+    use crate::InputString;
 
     /// Error with rich context returned when a string can't be parsed as an integer.
     ///

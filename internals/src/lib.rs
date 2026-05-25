@@ -40,6 +40,5 @@ pub mod _export {
 }
 
 pub mod array;
-pub mod error;
 pub mod script;
 pub mod slice;

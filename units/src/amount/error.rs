@@ -5,10 +5,9 @@
 use core::convert::Infallible;
 use core::fmt;
 
-use internals::error::InputString;
-
 use super::INPUT_STRING_LEN_LIMIT;
 use crate::parse_int::{PrefixedHexError, UnprefixedHexError};
+use crate::InputString;
 
 /// Error returned when parsing an amount with denomination fails.
 #[derive(Debug, Clone, PartialEq, Eq)]

@@ -229,7 +229,7 @@ impl From<EcdsaSighashType> for TapSighashType {
 pub mod error {
     use core::fmt;
 
-    use internals::error::InputString;
+    use crate::InputString;
 
     /// Integer is not a consensus valid sighash type.
     #[derive(Debug, Clone, PartialEq, Eq)]
