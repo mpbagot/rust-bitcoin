@@ -23,6 +23,9 @@ pub extern crate network;
 
 pub extern crate secp256k1;
 
+#[cfg(feature = "serde")]
+extern crate serde;
+
 pub mod ecdsa;
 pub mod key;
 pub mod sighash;
@@ -32,6 +35,8 @@ pub mod taproot;
 pub use self::key::{FullPublicKey, Keypair, LegacyPublicKey, PrivateKey, XOnlyPublicKey};
 
 include!("../include/newtype.rs"); // Explained in `REPO_DIR/docs/README.md`.
+#[cfg(feature = "serde")]
+include!("../include/serde_string.rs");
 #[cfg(feature = "alloc")]
 include!("../include/asref_push_bytes.rs");
 

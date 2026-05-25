@@ -23,6 +23,9 @@ pub extern crate serde_json;
 #[cfg(feature = "test-serde")]
 pub extern crate bincode;
 
+#[cfg(feature = "serde")]
+pub extern crate serde;
+
 // The pub module is a workaround for strange error:
 // "macro-expanded `macro_export` macros from the current crate cannot be referred to by absolute paths"
 #[doc(hidden)]
@@ -41,6 +44,3 @@ pub mod array_vec;
 pub mod error;
 pub mod script;
 pub mod slice;
-#[cfg(feature = "serde")]
-#[macro_use]
-pub mod serde;

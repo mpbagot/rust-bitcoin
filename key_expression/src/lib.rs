@@ -31,5 +31,8 @@ extern crate serde;
 #[cfg(feature = "alloc")]
 include!("../include/array_newtype.rs");
 
+#[cfg(feature = "serde")]
+include!("../include/serde_string.rs");
+
 #[cfg(feature = "alloc")]
 pub mod bip32;

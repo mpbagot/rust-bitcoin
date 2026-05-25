@@ -1,12 +1,9 @@
-//! Contains extensions of `serde` and internal reexports.
-
-#[doc(hidden)]
-pub use serde::{de, ser, Deserialize, Deserializer, Serialize, Serializer};
+// SPDX-License-Identifier: CC0-1.0
 
 /// Implements `serde::Serialize` by way of `Display`.
 ///
 /// `$name` is required to implement `core::fmt::Display`.
-#[macro_export]
+#[allow(unused_macros)]
 macro_rules! serde_string_serialize_impl {
     ($name:ty, $expecting:literal) => {
         impl $crate::serde::Serialize for $name {
@@ -19,11 +16,12 @@ macro_rules! serde_string_serialize_impl {
         }
     };
 }
+pub(crate) use serde_string_serialize_impl;
 
 /// Implements `serde::Deserialize` by way of `FromStr`.
 ///
 /// `$name` is required to implement `core::str::FromStr`.
-#[macro_export]
+#[allow(unused_macros)]
 macro_rules! serde_string_deserialize_impl {
     ($name:ty, $expecting:literal) => {
         impl<'de> $crate::serde::Deserialize<'de> for $name {
@@ -54,14 +52,16 @@ macro_rules! serde_string_deserialize_impl {
         }
     };
 }
+pub(crate) use serde_string_deserialize_impl;
 
 /// Implements `serde::Serialize` and `Deserialize` by way of `Display` and `FromStr` respectively.
 ///
 /// `$name` is required to implement `core::fmt::Display` and `core::str::FromStr`.
-#[macro_export]
+#[allow(unused_macros)]
 macro_rules! serde_string_impl {
     ($name:ty, $expecting:literal) => {
-        $crate::serde_string_deserialize_impl!($name, $expecting);
-        $crate::serde_string_serialize_impl!($name, $expecting);
+        crate::serde_string_deserialize_impl!($name, $expecting);
+        crate::serde_string_serialize_impl!($name, $expecting);
     };
 }
+pub(crate) use serde_string_impl;

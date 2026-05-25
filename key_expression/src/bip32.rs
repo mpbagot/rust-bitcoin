@@ -93,7 +93,7 @@ pub struct Xpriv {
     pub chain_code: ChainCode,
 }
 #[cfg(feature = "serde")]
-internals::serde_string_impl!(Xpriv, "a BIP-0032 extended private key");
+crate::serde_string_impl!(Xpriv, "a BIP-0032 extended private key");
 
 #[cfg(not(feature = "std"))]
 impl fmt::Debug for Xpriv {
@@ -126,7 +126,7 @@ pub struct Xpub {
     pub chain_code: ChainCode,
 }
 #[cfg(feature = "serde")]
-internals::serde_string_impl!(Xpub, "a BIP-0032 extended public key");
+crate::serde_string_impl!(Xpub, "a BIP-0032 extended public key");
 
 /// Flag with the hardened bit turned on.
 const HARDENED_FLAG: u32 = 1 << 31;
@@ -339,7 +339,7 @@ pub trait IntoDerivationPath {
 pub struct DerivationPath(Vec<ChildNumber>);
 
 #[cfg(feature = "serde")]
-internals::serde_string_impl!(DerivationPath, "a BIP-0032 derivation path");
+crate::serde_string_impl!(DerivationPath, "a BIP-0032 derivation path");
 
 impl<I> Index<I> for DerivationPath
 where
