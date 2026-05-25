@@ -43,7 +43,6 @@ pub mod error;
 mod parse;
 pub mod script;
 pub mod slice;
-pub mod wrap_debug;
 #[cfg(feature = "serde")]
 #[macro_use]
 pub mod serde;
