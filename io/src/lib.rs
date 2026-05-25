@@ -31,6 +31,8 @@ pub extern crate encoding;
 #[cfg(feature = "hashes")]
 pub extern crate hashes;
 
+include!(concat!(env!("OUT_DIR"), "/rust_version.rs"));
+
 #[cfg(feature = "std")]
 mod bridge;
 pub mod error;

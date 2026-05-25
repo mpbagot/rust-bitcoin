@@ -26,13 +26,6 @@ pub extern crate bincode;
 #[cfg(feature = "serde")]
 pub extern crate serde;
 
-// The pub module is a workaround for strange error:
-// "macro-expanded `macro_export` macros from the current crate cannot be referred to by absolute paths"
-#[doc(hidden)]
-pub mod rust_version {
-    include!(concat!(env!("OUT_DIR"), "/rust_version.rs"));
-}
-
 #[doc(hidden)]
 pub mod _export {
     #[cfg(feature = "alloc")]

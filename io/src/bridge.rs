@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: CC0-1.0
 
-use internals::rust_version;
-
 // Defined in `REPO_DIR/include/newtype.rs`.
 crate::transparent_newtype! {
     /// A bridging wrapper providing the I/O traits for types that already implement `std` I/O traits.
