@@ -38,5 +38,3 @@ pub mod _export {
     #[cfg(feature = "alloc")]
     pub extern crate alloc;
 }
-
-pub mod script;

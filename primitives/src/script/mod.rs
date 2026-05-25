@@ -18,7 +18,7 @@ use core::marker::PhantomData;
 
 #[cfg(feature = "hex")]
 use hex::DisplayHex;
-use internals::script::{self, PushDataLenLen};
+use crate::script_internal::{self as script, PushDataLenLen};
 
 use crate::prelude::rc::Rc;
 #[cfg(target_has_atomic = "ptr")]

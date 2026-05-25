@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 
-use internals::script::{self, PushDataLenLen};
+use crate::script_internal::{self as script, PushDataLenLen};
 
 use super::{Error, PushBytes, PushBytesExt as _, Script, ScriptBufExtPriv as _};
 use crate::opcodes::{self, Opcode};
