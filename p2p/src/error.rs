@@ -6,7 +6,6 @@ use alloc::string::String;
 use core::convert::Infallible;
 use core::fmt;
 
-use internals::write_err;
 use network::Network;
 
 use crate::Magic;

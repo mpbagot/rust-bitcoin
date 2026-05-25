@@ -71,8 +71,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// An error occurring when decoding a [`SendTxRcnCl`](super) message.
     #[derive(Debug, Clone, PartialEq, Eq)]
     pub struct SendTxRcnClDecoderError(

@@ -605,8 +605,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// An error consensus decoding a [`VersionMessage`].
     ///
     /// [`VersionMessage`]: super::VersionMessage

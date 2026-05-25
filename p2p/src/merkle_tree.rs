@@ -533,8 +533,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// An error occuring when decoding a [`MerkleBlock`].
     ///
     /// [`MerkleBlock`]: super::MerkleBlock

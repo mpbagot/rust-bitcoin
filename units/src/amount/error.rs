@@ -6,7 +6,6 @@ use core::convert::Infallible;
 use core::fmt;
 
 use internals::error::InputString;
-use internals::write_err;
 
 use super::INPUT_STRING_LEN_LIMIT;
 use crate::parse_int::{PrefixedHexError, UnprefixedHexError};

@@ -182,8 +182,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     use crate::address::AddressType;
 
     /// An error used for dealing with Bitcoin Signed Messages.

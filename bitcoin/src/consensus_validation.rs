@@ -211,8 +211,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     use crate::transaction::OutPoint;
 
     /// Wrapped error from `bitcoinconsensus`.

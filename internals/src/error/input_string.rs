@@ -17,14 +17,14 @@ pub struct InputString(Storage);
 impl InputString {
     /// Displays a message saying `failed to parse <self> as <what>`.
     ///
-    /// This is normally used with the `write_err!` macro.
+    /// This is normally used with the `write_err!` macro (defined in each crate's `lib.rs`
+    /// via `include!`).
     ///
     /// # Examples
     ///
     /// ```
     /// use core::fmt;
     /// use bitcoin_internals::error::InputString;
-    /// use bitcoin_internals::write_err;
     ///
     /// /// An example parsing error including the parse error from core.
     /// #[derive(Debug, Clone, PartialEq, Eq)]
@@ -36,7 +36,7 @@ impl InputString {
     /// impl fmt::Display for ParseError {
     ///     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     ///         // Outputs "failed to parse '<input string>' as foo"
-    ///         write_err!(f, "{}", self.input.display_cannot_parse("foo"); self.error)
+    ///         write!(f, "{}", self.input.display_cannot_parse("foo"))
     ///     }
     /// }
     /// ```

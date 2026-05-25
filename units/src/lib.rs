@@ -43,6 +43,8 @@ pub extern crate serde;
 #[cfg(feature = "arbitrary")]
 pub extern crate arbitrary;
 
+include!("../include/write_err.rs");
+
 #[doc(hidden)]
 pub mod _export {
     /// A re-export of `core::*`.

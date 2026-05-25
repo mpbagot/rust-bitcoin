@@ -958,7 +958,6 @@ pub mod error {
     use core::fmt;
 
     use encoding::CompactSizeDecoderError;
-    use internals::write_err;
 
     /// An error when consensus decoding a [`Witness`].
     ///

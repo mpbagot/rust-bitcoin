@@ -1527,8 +1527,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// Error returned while generating key from slice.
     #[derive(Debug, Clone, PartialEq, Eq)]
     #[non_exhaustive]

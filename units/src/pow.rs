@@ -346,8 +346,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     use super::ParseU256Error;
 
     /// An error consensus decoding an `CompactTarget`.

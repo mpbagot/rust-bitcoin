@@ -156,8 +156,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     use crate::parse_int::ParseIntError;
 
     /// Error parsing [`WitnessVersion`] from a string.

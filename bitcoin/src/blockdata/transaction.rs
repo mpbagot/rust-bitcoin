@@ -1203,8 +1203,6 @@ mod sealed {
 pub mod error {
     use core::fmt;
 
-    use internals::write_err;
-
     #[rustfmt::skip]            // Keep public re-exports separate.
     #[doc(no_inline)]
     pub use primitives::transaction::error::{

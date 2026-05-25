@@ -5,8 +5,6 @@
 use core::convert::Infallible;
 use core::fmt;
 
-use internals::write_err;
-
 use super::{NumberOf512Seconds, NumberOfBlocks};
 
 /// Error returned when a sequence number is parsed as a lock time, but its

@@ -649,8 +649,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// An error consensus decoding an [`Address`].
     ///
     /// [`Address`]: super::Address
@@ -665,7 +663,7 @@ pub mod error {
 
     impl fmt::Display for AddressDecoderError {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            internals::write_err!(f, "address decoder error"; self.0)
+            write_err!(f, "address decoder error"; self.0)
         }
     }
 

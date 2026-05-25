@@ -64,6 +64,8 @@ extern crate alloc;
 #[cfg(feature = "std")]
 extern crate std;
 
+include!("../include/write_err.rs");
+
 mod compact_size;
 mod decode;
 mod encode;

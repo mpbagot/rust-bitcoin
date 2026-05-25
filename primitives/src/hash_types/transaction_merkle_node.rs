@@ -10,7 +10,6 @@ use core::str;
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
 use hashes::sha256d;
-use internals::write_err;
 
 use crate::merkle_tree::MerkleNode;
 use crate::Txid;

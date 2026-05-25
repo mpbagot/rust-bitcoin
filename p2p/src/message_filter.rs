@@ -462,8 +462,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// Errors occuring when decoding a [`FilterHash`] message.
     ///
     /// [`FilterHash`]: super::FilterHash

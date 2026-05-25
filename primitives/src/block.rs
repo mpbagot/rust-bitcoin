@@ -755,8 +755,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     #[cfg(feature = "alloc")]
     use super::Block;
     #[cfg(feature = "hex")]

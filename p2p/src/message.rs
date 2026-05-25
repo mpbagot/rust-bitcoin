@@ -1873,8 +1873,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// Error decoding a [`CommandString`].
     ///
     /// [`CommandString`]: super::CommandString

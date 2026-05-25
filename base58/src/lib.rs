@@ -27,6 +27,9 @@ extern crate test;
 extern crate std;
 
 #[cfg(feature = "alloc")]
+include!("../include/write_err.rs");
+
+#[cfg(feature = "alloc")]
 static BASE58_CHARS: &[u8] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
 #[cfg(feature = "alloc")]

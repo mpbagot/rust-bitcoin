@@ -420,8 +420,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     use crate::sighash::InvalidSighashTypeError;
 
     /// An error constructing a [`Signature`] from a byte slice.

@@ -8,8 +8,6 @@
 use core::convert::Infallible;
 use core::fmt;
 
-use internals::write_err;
-
 #[cfg(doc)]
 use crate::{ArrayDecoder, Decoder2, Decoder3, Decoder4, Decoder6};
 #[cfg(feature = "alloc")]

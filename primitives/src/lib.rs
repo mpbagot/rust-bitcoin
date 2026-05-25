@@ -37,6 +37,8 @@ pub extern crate encoding;
 #[cfg(feature = "hex")]
 pub extern crate hex;
 
+include!("../include/write_err.rs");
+
 #[doc(hidden)]
 pub mod _export {
     /// A re-export of `core::*`.

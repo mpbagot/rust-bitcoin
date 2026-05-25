@@ -9,6 +9,7 @@
 #![doc(test(attr(warn(unused))))]
 
 include!("../include/array_newtype.rs");
+include!("../include/write_err.rs");
 
 mod network_ext;
 

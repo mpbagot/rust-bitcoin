@@ -6,7 +6,6 @@ use core::convert::Infallible;
 use core::fmt;
 
 use encoding::ByteVecDecoderError;
-use internals::write_err;
 
 #[rustfmt::skip]                // Keep public re-exports separate.
 #[doc(inline)]

@@ -163,9 +163,6 @@ pub mod error {
     #[cfg(feature = "encoding")]
     use core::fmt;
 
-    #[cfg(feature = "encoding")]
-    use internals::write_err;
-
     /// An error consensus decoding an `BlockTime`.
     #[cfg(feature = "encoding")]
     #[derive(Debug, Clone, PartialEq, Eq)]

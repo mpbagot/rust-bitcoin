@@ -62,8 +62,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// Errors occuring when decoding a [`SendCmpct`] message.
     ///
     /// [`SendCmpct`]: super::SendCmpct

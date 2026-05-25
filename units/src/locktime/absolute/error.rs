@@ -6,8 +6,6 @@ use core::convert::Infallible;
 use core::fmt;
 
 use internals::error::InputString;
-#[cfg(feature = "encoding")]
-use internals::write_err;
 
 use super::{Height, MedianTimePast, LOCK_TIME_THRESHOLD};
 use crate::parse_int::{ParseIntError, PrefixedHexError, UnprefixedHexError};

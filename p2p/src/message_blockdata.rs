@@ -332,8 +332,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     /// An error consensus decoding an [`Inventory`].
     ///
     /// [`Inventory`]: super::Inventory

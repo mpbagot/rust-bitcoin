@@ -977,8 +977,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    use internals::write_err;
-
     use crate::transaction;
 
     #[rustfmt::skip]            // Keep public re-exports separate.

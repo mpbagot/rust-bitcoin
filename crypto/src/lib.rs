@@ -26,6 +26,8 @@ pub extern crate secp256k1;
 #[cfg(feature = "serde")]
 extern crate serde;
 
+include!("../include/write_err.rs");
+
 pub mod ecdsa;
 pub mod key;
 pub mod sighash;

@@ -578,8 +578,8 @@ impl fmt::Display for ParseU256Error {
             Self::Overflow => write!(f, "parsed value exceeded unsigned 256-bit range"),
             Self::Empty => write!(f, "parsed string is empty"),
             Self::InvalidEncoding(ref e) =>
-                internals::write_err!(f, "parsed number contained non-ascii chars"; e),
-            Self::InvalidDigit(ref e) => internals::write_err!(f, "parsed number contained invalid digit"; e),
+                write_err!(f, "parsed number contained non-ascii chars"; e),
+            Self::InvalidDigit(ref e) => write_err!(f, "parsed number contained invalid digit"; e),
         }
     }
 }

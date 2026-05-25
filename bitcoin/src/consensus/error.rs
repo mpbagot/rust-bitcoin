@@ -6,7 +6,6 @@ use core::convert::Infallible;
 use core::fmt;
 
 use hex::error::{InvalidCharError, OddLengthStringError};
-use internals::write_err;
 
 #[cfg(doc)]
 use super::IterReader;

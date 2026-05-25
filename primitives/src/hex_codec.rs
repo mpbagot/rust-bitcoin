@@ -14,7 +14,6 @@ use core::fmt::Write as _;
 
 use encoding::{Decode, Decoder, Encode, EncoderByteIter};
 use hex::{BytesToHexIter, Case};
-use internals::write_err;
 
 /// Hex encoding wrapper type for `Encode` + `Decode` types.
 ///

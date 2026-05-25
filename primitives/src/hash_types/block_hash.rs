@@ -10,7 +10,6 @@ use core::str;
 #[cfg(feature = "arbitrary")]
 use arbitrary::{Arbitrary, Unstructured};
 use hashes::sha256d;
-use internals::write_err;
 
 /// A bitcoin block hash.
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]

@@ -631,9 +631,6 @@ pub mod error {
     use core::convert::Infallible;
     use core::fmt;
 
-    #[cfg(feature = "encoding")]
-    use internals::write_err;
-
     use crate::locktime::relative;
 
     /// Error returned when the block interval is too big to be used as a relative lock time.

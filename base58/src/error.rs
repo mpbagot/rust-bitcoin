@@ -5,8 +5,6 @@
 use core::convert::Infallible;
 use core::fmt;
 
-use internals::write_err;
-
 /// An error occurred during base58 decoding (with checksum).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Error(pub(super) ErrorInner);

@@ -30,6 +30,8 @@ extern crate serde;
 // crate::hashes to exist.
 #[cfg(feature = "alloc")]
 include!("../include/array_newtype.rs");
+#[cfg(feature = "alloc")]
+include!("../include/write_err.rs");
 
 #[cfg(feature = "serde")]
 include!("../include/serde_string.rs");
