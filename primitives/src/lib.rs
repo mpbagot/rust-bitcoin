@@ -39,6 +39,7 @@ pub extern crate hex;
 
 include!("../include/write_err.rs");
 include!("../include/array_ext.rs");
+include!("../include/slice_ext.rs");
 
 #[doc(hidden)]
 pub mod _export {

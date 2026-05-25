@@ -40,4 +40,3 @@ pub mod _export {
 }
 
 pub mod script;
-pub mod slice;

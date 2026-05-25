@@ -10,9 +10,7 @@ mod tests;
 
 use core::{convert, fmt};
 
-use internals::slice::SliceExt;
-
-use crate::{incomplete_block_len, sha256d};
+use crate::{incomplete_block_len, sha256d, SliceExt};
 #[cfg(doc)]
 use crate::{sha256t, sha256t_tag};
 

@@ -1,13 +1,13 @@
 use core::borrow::{Borrow, BorrowMut};
 use core::slice;
 
-use internals::slice::SliceExt;
 pub use privacy_boundary::TaprootMerkleBranch;
 
 use super::{
     DecodeError, InvalidMerkleBranchSizeError, InvalidMerkleTreeDepthError, TapNodeHash,
     TaprootMerkleBranchBuf, TAPROOT_CONTROL_MAX_NODE_COUNT, TAPROOT_CONTROL_NODE_SIZE,
 };
+use crate::SliceExt;
 
 /// Makes sure only the allowed conversions are accessible to external code.
 mod privacy_boundary {

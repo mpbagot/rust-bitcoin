@@ -304,6 +304,7 @@ pub fn debug_hex<'a>(
 }
 
 include!("../include/newtype.rs"); // Explained in `REPO_DIR/docs/README.md`.
+include!("../include/slice_ext.rs");
 
 #[cfg(test)]
 mod tests {

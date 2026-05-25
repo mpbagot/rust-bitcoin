@@ -32,6 +32,8 @@ include!("../include/write_err.rs");
 include!("../include/array_vec.rs");
 #[cfg(feature = "alloc")]
 include!("../include/array_ext.rs");
+#[cfg(feature = "alloc")]
+include!("../include/slice_ext.rs");
 
 #[cfg(feature = "alloc")]
 static BASE58_CHARS: &[u8] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
@@ -49,9 +51,6 @@ pub use std::{string::String, vec::Vec};
 
 #[cfg(feature = "alloc")]
 use hashes::sha256d;
-#[allow(unused)] // MSRV polyfill
-#[cfg(feature = "alloc")]
-use internals::slice::SliceExt;
 
 #[cfg(feature = "alloc")]
 use crate::error::{IncorrectChecksumError, TooShortError};

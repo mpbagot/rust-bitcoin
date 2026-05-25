@@ -4,7 +4,7 @@
 
 #![allow(clippy::unreadable_literal)]
 
-use internals::slice::SliceExt;
+use crate::SliceExt;
 mod crypto;
 #[cfg(test)]
 mod tests;

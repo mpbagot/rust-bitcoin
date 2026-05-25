@@ -3,9 +3,8 @@
 #![allow(clippy::unreadable_literal)]
 #![allow(clippy::many_single_char_names)]
 
-use internals::slice::SliceExt;
-
 use super::{HashEngine, BLOCK_SIZE};
+use crate::SliceExt;
 
 impl HashEngine {
     // Basic unoptimized algorithm from Wikipedia

@@ -4,9 +4,8 @@
 #![allow(clippy::too_many_lines)]
 #![allow(clippy::many_single_char_names)]
 
-use internals::slice::SliceExt;
-
 use super::{HashEngine, BLOCK_SIZE};
+use crate::SliceExt;
 
 #[cfg(feature = "small-hash")]
 #[macro_use]

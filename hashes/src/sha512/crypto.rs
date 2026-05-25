@@ -4,9 +4,8 @@
 #![allow(clippy::too_many_lines)]
 #![allow(clippy::many_single_char_names)]
 
-use internals::slice::SliceExt;
-
 use super::{HashEngine, BLOCK_SIZE};
+use crate::SliceExt;
 
 #[allow(non_snake_case)]
 fn Ch(x: u64, y: u64, z: u64) -> u64 { z ^ (x & (y ^ z)) }

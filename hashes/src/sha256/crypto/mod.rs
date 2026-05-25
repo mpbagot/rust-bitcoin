@@ -21,9 +21,8 @@ mod sse41;
 #[cfg(any(feature = "cpufeatures", feature = "std"))]
 mod avx2;
 
-use internals::slice::SliceExt;
-
 use super::{HashEngine, Midstate, BLOCK_SIZE};
+use crate::SliceExt;
 
 #[cfg(feature = "cpufeatures")]
 #[cfg(target_arch = "aarch64")]
