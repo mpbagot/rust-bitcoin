@@ -2053,6 +2053,39 @@ mod tests {
     }
 
     #[test]
+    fn ecdsa_sighash_type_from_consensus_roundtrips() {
+        use super::EcdsaSighashType;
+
+        for n in 0..=255u32 {
+            let ty = EcdsaSighashType::from_consensus(n);
+            assert_eq!(ty.to_u32(), n);
+            assert_eq!(u32::from(ty.to_consensus_u8()), n);
+            match n {
+                0x01 | 0x02 | 0x03 | 0x81 | 0x82 | 0x83 =>
+                    assert!(!matches!(ty, EcdsaSighashType::NonStandard(_))),
+                _ => assert_eq!(ty, EcdsaSighashType::NonStandard(n)),
+            }
+        }
+
+        // On replay-protected forks bits above the lowest byte are sometimes set.
+        let ty = EcdsaSighashType::from_consensus(0x0100_0041);
+        assert_eq!(ty, EcdsaSighashType::NonStandard(0x0100_0041));
+        assert_eq!(ty.to_u32(), 0x0100_0041);
+
+        assert_eq!(ty.to_consensus_u8(), 0x41);
+    }
+
+    #[test]
+    fn ecdsa_sighash_type_non_standard_is_single_uses_mask() {
+        use super::EcdsaSighashType;
+
+        assert!(EcdsaSighashType::NonStandard(0x63).is_single());
+        assert!(EcdsaSighashType::NonStandard(0xe3).is_single());
+        assert!(!EcdsaSighashType::NonStandard(0x65).is_single());
+        assert!(!EcdsaSighashType::NonStandard(0x62).is_single());
+    }
+
+    #[test]
     fn sighashtype_fromstr_display() {
         let sighashtypes = vec![
             ("SIGHASH_DEFAULT", TapSighashType::Default),
@@ -2128,6 +2161,47 @@ mod tests {
             &Vec::from_hex("863ef3e1a92afbfdb97f31ad0fc7683ee943e9abcf2501590ff8f6551f47e5e5")
                 .unwrap()[..],
         );
+    }
+
+    #[test]
+    fn mainnet_input_with_non_standard_sighash_type_verifies() {
+        use secp256k1::PublicKey;
+
+        // https://github.com/rust-bitcoin/rust-bitcoin/issues/6647
+        //
+        // Mainnet tx 969c4f116f0a68406d30dc80bf17991fb8fe7fa1b240382baefa2c324b79d50d
+        // (block 508011), a P2SH-P2WPKH input whose signature uses sighash type byte 0x65.
+        let tx = deserialize::<Transaction>(&hex!(
+            "01000000000101447e208868dbc8e930fc6eba4fe0d0abfe0d9dc2db4ba70542e02467f00205c90\
+                100000017160014e20c60563894174c253ae937ba59ace46ab9ffb1ffffffff010845f30500000000\
+                1976a91414ac7fc2a782bde1555b753d75ff4ed146683cae88ac024730440220120003c32cca7eabf\
+                07bad5c31125accc09d13c39546fa93833b8b69a2c72ed7022057083dc2ed348156874b8af859ac7a\
+                9c16e5ce39353f3f1ac2226b49c2b319af652103f73386ac6e567581f8d0611ad7a8536c3cd0253e5\
+                35f6fc4707514b2ab54198700000000"
+        ))
+        .unwrap();
+
+        let witness = &tx.input[0].witness.to_vec();
+        let sig = crate::ecdsa::Signature::from_slice(witness.first().unwrap())
+            .expect("non-standard sighash types parse");
+        assert_eq!(sig.sighash_type, EcdsaSighashType::NonStandard(0x65));
+        let pk = PublicKey::from_slice(witness.get(1).unwrap()).unwrap();
+
+        // redeemScript from the scriptSig: the v0 witness program.
+        let redeem = ScriptBuf::from_hex("0014e20c60563894174c253ae937ba59ace46ab9ffb1").unwrap();
+        let amount = Amount::from_sat(99_830_000);
+
+        let sighash = SighashCache::new(&tx)
+            .p2wpkh_signature_hash(0, &redeem, amount, sig.sighash_type)
+            .unwrap();
+
+        let s = secp256k1::Secp256k1::verification_only();
+        s.verify_ecdsa(
+            &secp256k1::Message::from_digest(sighash.to_byte_array()),
+            &sig.signature,
+            &pk,
+        )
+        .expect("consensus digest verifies");
     }
 
     #[test]
