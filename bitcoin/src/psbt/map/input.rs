@@ -178,7 +178,7 @@ impl FromStr for PsbtSighashType {
 }
 impl From<EcdsaSighashType> for PsbtSighashType {
     fn from(ecdsa_hash_ty: EcdsaSighashType) -> Self {
-        PsbtSighashType { inner: ecdsa_hash_ty as u32 }
+        PsbtSighashType { inner: ecdsa_hash_ty.to_u32() }
     }
 }
 

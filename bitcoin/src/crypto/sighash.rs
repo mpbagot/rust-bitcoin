@@ -332,26 +332,34 @@ impl<'s> From<ScriptPath<'s>> for TapLeafHash {
 }
 
 /// Hashtype of an input's signature, encoded in the last byte of the signature.
-///
-/// Fixed values so they can be cast as integer types for encoding (see also
-/// [`TapSighashType`]).
 #[derive(PartialEq, Eq, Debug, Copy, Clone, Hash)]
 pub enum EcdsaSighashType {
     /// 0x1: Sign all outputs.
-    All = 0x01,
+    All,
     /// 0x2: Sign no outputs --- anyone can choose the destination.
-    None = 0x02,
+    None,
     /// 0x3: Sign the output whose index matches this input's index. If none exists,
     /// sign the hash `0000000000000000000000000000000000000000000000000000000000000001`.
     /// (This rule is probably an unintentional C++ism, but it's consensus so we have
     /// to follow it.)
-    Single = 0x03,
+    Single,
     /// 0x81: Sign all outputs but only this input.
-    AllPlusAnyoneCanPay = 0x81,
+    AllPlusAnyoneCanPay,
     /// 0x82: Sign no outputs and only this input.
-    NonePlusAnyoneCanPay = 0x82,
+    NonePlusAnyoneCanPay,
     /// 0x83: Sign one output and only this input (see `Single` for what "one output" means).
-    SinglePlusAnyoneCanPay = 0x83,
+    SinglePlusAnyoneCanPay,
+    /// Any other value: consensus-valid but non-standard
+    ///
+    /// The value is a `u32` because the legacy and segwit v0 signing algorithms hash the
+    /// sighash type as 4 bytes, even though only the lowest byte is appended to the
+    /// signature in a transaction. On bitcoin the higher bits are always zero, but on replay-protected forks they are
+    /// sometimes set.
+    ///
+    /// Please be careful: don't use `NonStandard` for the six standard values, use
+    /// [`Self::from_consensus`] instead. E.g. `NonStandard(0x01)` and `All` would serialize
+    /// identically but compare unequal.
+    NonStandard(u32),
 }
 #[cfg(feature = "serde")]
 crate::serde_utils::serde_string_impl!(EcdsaSighashType, "a EcdsaSighashType data");
@@ -367,6 +375,7 @@ impl fmt::Display for EcdsaSighashType {
             AllPlusAnyoneCanPay => "SIGHASH_ALL|SIGHASH_ANYONECANPAY",
             NonePlusAnyoneCanPay => "SIGHASH_NONE|SIGHASH_ANYONECANPAY",
             SinglePlusAnyoneCanPay => "SIGHASH_SINGLE|SIGHASH_ANYONECANPAY",
+            Self::NonStandard(n) => return write!(f, "0x{:02x}", n),
         };
         f.write_str(s)
     }
@@ -385,7 +394,17 @@ impl str::FromStr for EcdsaSighashType {
             "SIGHASH_ALL|SIGHASH_ANYONECANPAY" => Ok(AllPlusAnyoneCanPay),
             "SIGHASH_NONE|SIGHASH_ANYONECANPAY" => Ok(NonePlusAnyoneCanPay),
             "SIGHASH_SINGLE|SIGHASH_ANYONECANPAY" => Ok(SinglePlusAnyoneCanPay),
-            _ => Err(SighashTypeParseError { unrecognized: s.to_owned() }),
+            _ => {
+                // Non Standard values are displayed as "0xNN"
+                // We return `Self::from_consensus(n)` instead of `Self::NonStandard(n)` so that
+                // standard bytes map to the named variants (eg. 0x01 return `All`)
+                if let Some(hex) = s.strip_prefix("0x") {
+                    if let Ok(n) = u32::from_str_radix(hex, 16) {
+                        return Ok(Self::from_consensus(n));
+                    }
+                }
+                Err(SighashTypeParseError { unrecognized: s.into() })
+            }
         }
     }
 }
@@ -402,6 +421,16 @@ impl EcdsaSighashType {
             AllPlusAnyoneCanPay => (All, true),
             NonePlusAnyoneCanPay => (None, true),
             SinglePlusAnyoneCanPay => (Single, true),
+            NonStandard(n) => {
+                // Check sighash tyoe
+                let sighash_type = match n & 0x1f {
+                    0x02 => None,
+                    0x03 => Single,
+                    _ => All,
+                };
+                // Check ACP
+                (sighash_type, n & 0x80 == 0x80)
+            }
         }
     }
 
@@ -411,26 +440,25 @@ impl EcdsaSighashType {
     /// type (after masking with 0x1f), regardless of the ANYONECANPAY flag.
     ///
     /// See: <https://github.com/bitcoin/bitcoin/blob/e486597/src/script/interpreter.cpp#L1618-L1619>
-    pub fn is_single(&self) -> bool { matches!(self, Self::Single | Self::SinglePlusAnyoneCanPay) }
+    pub fn is_single(&self) -> bool {
+        match *self {
+            Self::Single => true,
+            Self::SinglePlusAnyoneCanPay => true,
+            Self::NonStandard(n) => (n & 0x1f) == 0x03,
+            _ => false,
+        }
+    }
 
     /// Creates a [`EcdsaSighashType`] from a raw `u32`.
     ///
+    /// This round-trips: `from_consensus(n).to_u32() == n` for every `n`.
+    ///
     /// **Note**: this replicates consensus behaviour, for current standardness rules correctness
     /// you probably want [`Self::from_standard`].
-    ///
-    /// This might cause unexpected behavior because it does not roundtrip. That is,
-    /// `EcdsaSighashType::from_consensus(n) as u32 != n` for non-standard values of `n`. While
-    /// verifying signatures, the user should retain the `n` and use it compute the signature hash
-    /// message.
     pub fn from_consensus(n: u32) -> EcdsaSighashType {
         use EcdsaSighashType::*;
 
-        // In Bitcoin Core, the SignatureHash function will mask the (int32) value with
-        // 0x1f to (apparently) deactivate ACP when checking for SINGLE and NONE bits.
-        // We however want to be matching also against on ACP-masked ALL, SINGLE, and NONE.
-        // So here we re-activate ACP.
-        let mask = 0x1f | 0x80;
-        match n & mask {
+        match n {
             // "real" sighashes
             0x01 => All,
             0x02 => None,
@@ -438,9 +466,7 @@ impl EcdsaSighashType {
             0x81 => AllPlusAnyoneCanPay,
             0x82 => NonePlusAnyoneCanPay,
             0x83 => SinglePlusAnyoneCanPay,
-            // catchalls
-            x if x & 0x80 == 0x80 => AllPlusAnyoneCanPay,
-            _ => All,
+            other => NonStandard(other),
         }
     }
 
@@ -465,22 +491,40 @@ impl EcdsaSighashType {
     }
 
     /// Converts [`EcdsaSighashType`] to a `u32` sighash flag.
+    pub fn to_u32(self) -> u32 {
+        match self {
+            Self::All => 0x01,
+            Self::None => 0x02,
+            Self::Single => 0x03,
+            Self::AllPlusAnyoneCanPay => 0x81,
+            Self::NonePlusAnyoneCanPay => 0x82,
+            Self::SinglePlusAnyoneCanPay => 0x83,
+            Self::NonStandard(n) => n,
+        }
+    }
+
+    /// Converts [`EcdsaSighashType`] to the `u8` appended to a signature.
     ///
-    /// The returned value is guaranteed to be a valid according to standardness rules.
-    pub fn to_u32(self) -> u32 { self as u32 }
+    /// Only the lowest byte of the sighash type is appended to the signature, so we truncate
+    /// to the lowest 8 bits.
+    #[inline]
+    pub fn to_consensus_u8(self) -> u8 { self.to_u32() as u8 }
 }
 
-impl From<EcdsaSighashType> for TapSighashType {
-    fn from(s: EcdsaSighashType) -> Self {
-        use TapSighashType::*;
+impl TryFrom<EcdsaSighashType> for TapSighashType {
+    type Error = InvalidSighashTypeError;
 
+    #[inline]
+    fn try_from(s: EcdsaSighashType) -> Result<Self, Self::Error> {
         match s {
-            EcdsaSighashType::All => All,
-            EcdsaSighashType::None => None,
-            EcdsaSighashType::Single => Single,
-            EcdsaSighashType::AllPlusAnyoneCanPay => AllPlusAnyoneCanPay,
-            EcdsaSighashType::NonePlusAnyoneCanPay => NonePlusAnyoneCanPay,
-            EcdsaSighashType::SinglePlusAnyoneCanPay => SinglePlusAnyoneCanPay,
+            EcdsaSighashType::All => Ok(Self::All),
+            EcdsaSighashType::None => Ok(Self::None),
+            EcdsaSighashType::Single => Ok(Self::Single),
+            EcdsaSighashType::AllPlusAnyoneCanPay => Ok(Self::AllPlusAnyoneCanPay),
+            EcdsaSighashType::NonePlusAnyoneCanPay => Ok(Self::NonePlusAnyoneCanPay),
+            EcdsaSighashType::SinglePlusAnyoneCanPay => Ok(Self::SinglePlusAnyoneCanPay),
+            // Taproot doesnt accept non-standard sighash
+            EcdsaSighashType::NonStandard(n) => Err(InvalidSighashTypeError(n)),
         }
     }
 }
