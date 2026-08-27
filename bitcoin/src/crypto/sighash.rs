@@ -332,7 +332,7 @@ impl<'s> From<ScriptPath<'s>> for TapLeafHash {
 }
 
 /// Hashtype of an input's signature, encoded in the last byte of the signature.
-#[derive(PartialEq, Eq, Debug, Copy, Clone, Hash)]
+#[derive(Debug, Copy, Clone)]
 pub enum EcdsaSighashType {
     /// 0x1: Sign all outputs.
     All,
@@ -355,14 +355,34 @@ pub enum EcdsaSighashType {
     /// sighash type as 4 bytes, even though only the lowest byte is appended to the
     /// signature in a transaction. On bitcoin the higher bits are always zero, but on replay-protected forks they are
     /// sometimes set.
-    ///
-    /// Please be careful: don't use `NonStandard` for the six standard values, use
-    /// [`Self::from_consensus`] instead. E.g. `NonStandard(0x01)` and `All` would serialize
-    /// identically but compare unequal.
     NonStandard(u32),
 }
 #[cfg(feature = "serde")]
 crate::serde_utils::serde_string_impl!(EcdsaSighashType, "a EcdsaSighashType data");
+
+impl PartialEq for EcdsaSighashType {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool { self.to_u32() == other.to_u32() }
+}
+
+impl Eq for EcdsaSighashType {}
+
+impl PartialOrd for EcdsaSighashType {
+    #[inline]
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> { Some(self.cmp(other)) }
+}
+
+impl Ord for EcdsaSighashType {
+    #[inline]
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering { self.to_u32().cmp(&other.to_u32()) }
+}
+
+impl core::hash::Hash for EcdsaSighashType {
+    #[inline]
+    fn hash<H: core::hash::Hasher>(&self, state: &mut H) {
+        core::hash::Hash::hash(&self.to_u32(), state);
+    }
+}
 
 impl fmt::Display for EcdsaSighashType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
