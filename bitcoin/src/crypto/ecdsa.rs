@@ -37,10 +37,14 @@ impl Signature {
         Signature { signature, sighash_type: EcdsaSighashType::All }
     }
 
-    /// Deserializes from slice following the standardness rules for [`EcdsaSighashType`].
+    /// Deserializes from slice.
+    ///
+    /// Non-standard sighash types are accepted here since they're consensus valid, so we use
+    /// [`EcdsaSighashType::from_consensus`] here instead of [`EcdsaSighashType::from_standard`]
+    /// to deserialize the sighash type.
     pub fn from_slice(sl: &[u8]) -> Result<Self, Error> {
         let (sighash_type, sig) = sl.split_last().ok_or(Error::EmptySignature)?;
-        let sighash_type = EcdsaSighashType::from_standard(*sighash_type as u32)?;
+        let sighash_type = EcdsaSighashType::from_consensus(*sighash_type as u32);
         let signature = secp256k1::ecdsa::Signature::from_der(sig).map_err(Error::Secp256k1)?;
         Ok(Signature { signature, sighash_type })
     }
