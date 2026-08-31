@@ -13,14 +13,14 @@
 //! #[cfg(feature = "std")]
 //! {
 //! use bitcoin::secp256k1::rand;
-//! use bitcoin::{Address, Network, LegacyPublicKey};
+//! use bitcoin::{Address, AddressParams, LegacyPublicKey};
 //!
 //! // Generate random key pair.
 //! let (_sk, pk) = secp256k1::generate_keypair(&mut rand::rng());
 //! let public_key = LegacyPublicKey::from_secp(pk); // Or `LegacyPublicKey::from(pk)`.
 //!
 //! // Generate a mainnet pay-to-pubkey-hash address.
-//! let address = Address::p2pkh(&public_key, Network::Bitcoin);
+//! let address = Address::p2pkh(&public_key, AddressParams::MAINNET);
 //! }
 //! ```
 //!
@@ -135,12 +135,11 @@ mod tests {
     use hex::hex;
 
     use super::*;
-    use crate::network::Network::{Bitcoin, Testnet};
-    use crate::network::{params, TestnetVersion};
+    use crate::network::params;
     use crate::script::{RedeemScriptBuf, ScriptPubKeyBuf, WitnessScriptBuf};
-    use crate::{FullPublicKey, LegacyPublicKey, Network, XOnlyPublicKey};
+    use crate::{FullPublicKey, LegacyPublicKey, XOnlyPublicKey};
 
-    fn roundtrips(addr: &Address, network: Network) {
+    fn roundtrips(addr: &Address, params: AddressParams) {
         assert_eq!(
             addr.to_string().parse::<Address<_>>().unwrap().assume_checked(),
             *addr,
@@ -148,7 +147,7 @@ mod tests {
             addr,
         );
         assert_eq!(
-            Address::from_script(&addr.script_pubkey(), network)
+            Address::from_script(&addr.script_pubkey(), params)
                 .expect("failed to create inner address from script_pubkey"),
             *addr,
             "script round-trip failed for {}",
@@ -178,7 +177,7 @@ mod tests {
         );
         assert_eq!(&addr.to_string(), "132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM");
         assert_eq!(addr.address_type(), Some(AddressType::P2pkh));
-        roundtrips(&addr, Bitcoin);
+        roundtrips(&addr, AddressParams::MAINNET);
     }
 
     #[test]
@@ -193,7 +192,7 @@ mod tests {
         let addr = Address::p2pkh(key, AddressParams::TESTNET3);
         assert_eq!(&addr.to_string(), "mqkhEMH6NCeYjFybv7pvFC22MFeaNT9AQC");
         assert_eq!(addr.address_type(), Some(AddressType::P2pkh));
-        roundtrips(&addr, Testnet(TestnetVersion::V3));
+        roundtrips(&addr, AddressParams::TESTNET3);
     }
 
     #[test]
@@ -210,7 +209,7 @@ mod tests {
         );
         assert_eq!(&addr.to_string(), "33iFwdLuRpW1uK1RTRqsoi8rR4NpDzk66k");
         assert_eq!(addr.address_type(), Some(AddressType::P2sh));
-        roundtrips(&addr, Bitcoin);
+        roundtrips(&addr, AddressParams::MAINNET);
     }
 
     #[test]
@@ -219,7 +218,7 @@ mod tests {
         let addr = Address::p2sh(&script, AddressParams::TESTNET3).unwrap();
         assert_eq!(&addr.to_string(), "2N3zXjbwdTcPsJiy8sUK9FhWJhqQCxA8Jjr");
         assert_eq!(addr.address_type(), Some(AddressType::P2sh));
-        roundtrips(&addr, Testnet(TestnetVersion::V3));
+        roundtrips(&addr, AddressParams::TESTNET3);
     }
 
     #[test]
@@ -231,7 +230,7 @@ mod tests {
         let addr = Address::p2wpkh(key, AddressParams::MAINNET);
         assert_eq!(&addr.to_string(), "bc1qvzvkjn4q3nszqxrv3nraga2r822xjty3ykvkuw");
         assert_eq!(addr.address_type(), Some(AddressType::P2wpkh));
-        roundtrips(&addr, Bitcoin);
+        roundtrips(&addr, AddressParams::MAINNET);
     }
 
     #[test]
@@ -244,7 +243,7 @@ mod tests {
             "bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej"
         );
         assert_eq!(addr.address_type(), Some(AddressType::P2wsh));
-        roundtrips(&addr, Bitcoin);
+        roundtrips(&addr, AddressParams::MAINNET);
     }
 
     #[test]
@@ -256,7 +255,7 @@ mod tests {
         let addr = Address::p2shwpkh(key, AddressParams::MAINNET);
         assert_eq!(&addr.to_string(), "3QBRmWNqqBGme9er7fMkGqtZtp4gjMFxhE");
         assert_eq!(addr.address_type(), Some(AddressType::P2sh));
-        roundtrips(&addr, Bitcoin);
+        roundtrips(&addr, AddressParams::MAINNET);
     }
 
     #[test]
@@ -266,7 +265,7 @@ mod tests {
         let addr = Address::p2shwsh(&script, AddressParams::MAINNET).expect("script is valid");
         assert_eq!(&addr.to_string(), "36EqgNnsWW94SreZgBWc1ANC6wpFZwirHr");
         assert_eq!(addr.address_type(), Some(AddressType::P2sh));
-        roundtrips(&addr, Bitcoin);
+        roundtrips(&addr, AddressParams::MAINNET);
     }
 
     #[test]
@@ -278,7 +277,7 @@ mod tests {
         let program = WitnessProgram::new(WitnessVersion::V13, &program).expect("valid program");
 
         let addr = Address::from_witness_program(program, AddressParams::MAINNET);
-        roundtrips(&addr, Bitcoin);
+        roundtrips(&addr, AddressParams::MAINNET);
     }
 
     #[test]
@@ -385,7 +384,7 @@ mod tests {
             "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr"
         );
         assert_eq!(address.address_type(), Some(AddressType::P2tr));
-        roundtrips(&address, Bitcoin);
+        roundtrips(&address, AddressParams::MAINNET);
     }
 
     #[test]
@@ -405,8 +404,8 @@ mod tests {
                 .unwrap();
         let expected = Err(FromScriptError::UnrecognizedScript);
 
-        assert_eq!(Address::from_script(&bad_p2wpkh, Network::Bitcoin), expected);
-        assert_eq!(Address::from_script(&bad_p2wsh, Network::Bitcoin), expected);
+        assert_eq!(Address::from_script(&bad_p2wpkh, AddressParams::MAINNET), expected);
+        assert_eq!(Address::from_script(&bad_p2wsh, AddressParams::MAINNET), expected);
         assert_eq!(
             Address::from_script(&invalid_segwitv0_script, &params::MAINNET),
             Err(FromScriptError::WitnessProgram(witness_program::Error::InvalidSegwitV0Length(17)))
@@ -426,13 +425,16 @@ mod tests {
             "bc1pgllnmtxs0g058qz7c6qgaqq4qknwrqj9z7rqn9e2dzhmcfmhlu4sfadf5e",
         ];
         for addr in &addresses {
-            let addr =
-                addr.parse::<Address<_>>().unwrap().require_network(Network::Bitcoin).unwrap();
+            let addr = addr
+                .parse::<Address<_>>()
+                .unwrap()
+                .require_network(AddressParams::MAINNET)
+                .unwrap();
             for another in &addresses {
                 let another = another
                     .parse::<Address<_>>()
                     .unwrap()
-                    .require_network(Network::Bitcoin)
+                    .require_network(AddressParams::MAINNET)
                     .unwrap();
                 assert_eq!(addr.matches_script_pubkey(&another.script_pubkey()), addr == another);
             }
@@ -447,7 +449,7 @@ mod tests {
 
         let script = ScriptPubKeyBuf::new_p2a();
         let address_unchecked = address_str.parse().unwrap();
-        let address = Address::from_script(&script, Network::Regtest).unwrap();
+        let address = Address::from_script(&script, AddressParams::REGTEST).unwrap();
         assert_eq!(address.as_unchecked(), &address_unchecked);
         assert_eq!(address.to_string(), address_str);
 
